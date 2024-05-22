@@ -15,10 +15,18 @@ class FFT
 {
 public:
 
+	FFT(int sizeOFInputVectors);
 	FFT(const c_vector vectorValueOfTimeFunc, const c_vector vectorValueOfFrequencyfunc);
 	FFT(const c_double* vectorValueOfTimeFunc, const c_double* vectorValueOfFrequencyfunc, int sizeOfData);
 
 	void PrintAllData();
+
+	template<typename array>
+	void FillTheInputVectors(array vectorValueOfTimeFunc, array vectorValueOfFrequencyfunc);
+	void MakeForwardFFT();
+	void MakeInverseFFT();
+	void SetAverageErrorValues();
+
 
 	c_double* GetResultOutputTimeData();
 	c_double* GetResultOutputFrequencyData();
@@ -55,12 +63,6 @@ private:
 	void SetN(int countOfValues);
 	void AllocateMemory();
 	void FindAllPrimeNumbers();
-
-	void SetModulVectorByVector(const c_double* inputVector, double* modulVector, int size);
-	void SetAverageErrorValues();
-
-	template<typename array>
-	void FillTheInputVectors(array vectorValueOfTimeFunc, array vectorValueOfFrequencyfunc);
 
 
 	c_double GetComplexExp(double N, double k, double n, double sign); // get the function exp(sign * j * TWO_PI * n * k / N)

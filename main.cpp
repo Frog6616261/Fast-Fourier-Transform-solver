@@ -15,9 +15,6 @@ void SetFileNamePath(std::string& line, std::string readersFileName);
 
 int main(int argc, char* argv[])
 {
-    //ep::init(&argc, argv);
-
-
     setlocale(LC_ALL, "ru");
     setlocale(LC_NUMERIC, "eng");
 
@@ -48,7 +45,15 @@ int main(int argc, char* argv[])
 #endif     
 
 
-    FFT Solver{ Parser.GetTimeArray(), Parser.GetFrequencyArray(), Parser.GetSizeOfTheArrrays() };
+    FFT Solver{Parser.GetSizeOfTheArrrays()};
+
+    Solver.FillTheInputVectors(Parser.GetTimeArray(), Parser.GetFrequencyArray());
+
+    Solver.MakeForwardFFT();
+    Solver.MakeInverseFFT();
+
+    Solver.SetAverageErrorValues();
+
 
 #ifdef PRINT_FFT_DATA
     Solver.PrintAllData();

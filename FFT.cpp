@@ -37,14 +37,6 @@ void FFT::FindAllPrimeNumbers()
 	m_endPosPrime--;
 }
 
-void FFT::SetModulVectorByVector(const c_double* inputVector, double* modulVector, int size)
-{
-	for (int k = 0; k < size; k++)
-	{
-		modulVector[k] = std::sqrt(
-			inputVector[k].imag() * inputVector[k].imag() + inputVector[k].real() * inputVector[k].real());
-	}
-}
 
 void FFT::SetAverageErrorValues()
 {
@@ -229,6 +221,13 @@ c_double FFT::GetComponentOfOutVector(int numberOfComponent, c_double** arrayOfE
 	return result;
 }
 
+FFT::FFT(int sizeOFInputVectors)
+{
+	SetN(sizeOFInputVectors);
+	AllocateMemory();
+	FindAllPrimeNumbers();
+}
+
 FFT::FFT(const c_vector vectorValueOfTimeFunc, const c_vector vectorValueOfFrequencyfunc)
 {
 	SetN(vectorValueOfTimeFunc.size());
@@ -288,6 +287,20 @@ void FFT::PrintAllData()
 	std::cout << "The Average Eror of inverse FFT for Imag time components: " << m_erTimeIm << "\n";
 
 	std::cout << "========================FFT value eror========================\n";
+}
+
+void FFT::MakeForwardFFT()
+{
+	MakePermutationForFFT(m_tValIn, m_fValOut, m_N);
+
+	MakeFFTOfVector(m_fValOut, m_N);
+}
+
+void FFT::MakeInverseFFT()
+{
+	MakePermutationForFFT(m_fValIn, m_tValOut, m_N);
+
+	MakeInverseFFTOfVector(m_tValOut, m_N);
 }
 
 c_double* FFT::GetResultOutputTimeData()
