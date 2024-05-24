@@ -144,21 +144,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DFT.cpp" />
     <ClCompile Include="ErorCalculator.cpp" />
     <ClCompile Include="FFT.cpp" />
     <ClCompile Include="FileParser.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="GraphPloter.cpp" />
+    <ClCompile Include="IDFT.cpp" />
     <ClCompile Include="IFFT.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Randomizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DFT.h" />
     <ClInclude Include="ErorCalculator.h" />
     <ClInclude Include="FFT.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="GraphPloter.h" />
+    <ClInclude Include="IDFT.h" />
     <ClInclude Include="IFFT.h" />
+    <ClInclude Include="Randomizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

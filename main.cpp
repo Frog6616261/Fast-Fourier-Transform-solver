@@ -1,12 +1,16 @@
 #include <iostream>
 #include "FFT.h"
+#include "IFFT.h"
 #include "FileReader.h"
 #include "FileParser.h"
+#include "ErorCalculator.h"
+#include "Randomizer.h"
 
 
 
 //#define PRINT_FILE_PARSER_DATA 
 //#define PRINT_FILE_READER_DATA
+//#define READ_FILE
 #define PRINT_FFT_DATA
 
 
@@ -18,6 +22,8 @@ int main(int argc, char* argv[])
     setlocale(LC_ALL, "ru");
     setlocale(LC_NUMERIC, "eng");
 
+
+#ifdef READ_FILE
     std::string line = argv[0];
     if (argc < 2)
     {
@@ -43,16 +49,24 @@ int main(int argc, char* argv[])
     Parser.PrintTime();
     Parser.PrintValue();
 #endif     
+#endif //READ_FILE
 
 
-    FFT Solver{Parser.GetSizeOfTheArrrays()};
+#ifndef READ_FILE
+    Randomizer Rand;
 
-    Solver.FillTheInputVectors(Parser.GetTimeArray(), Parser.GetFrequencyArray());
+    c_vector frequencyIn = { 1, 2, 3, 4 };
+    //frequencyIn.resize(100);
 
-    Solver.MakeForwardFFT();
-    Solver.MakeInverseFFT();
+    //Rand.SetRandomComplexNumbers(frequencyIn, 50);
 
-    Solver.SetAverageErrorValues();
+#endif // !READ_FILE
+
+
+ FFT Solver{frequencyIn};
+ 
+
+
 
 
 #ifdef PRINT_FFT_DATA
