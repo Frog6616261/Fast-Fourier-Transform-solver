@@ -8,8 +8,6 @@ void FFT::SetN(int countOfValues)
 void FFT::AllocateMemory()
 {
 	m_tValIn = new c_double[m_N]{};
-	m_fValIn = new c_double[m_N]{};
-	m_tValOut = new c_double[m_N]{};
 	m_fValOut = new c_double[m_N]{};
 	m_primeNumbers = new int[m_N] {};
 	m_interVect = new c_double[m_N]{};
@@ -35,26 +33,6 @@ void FFT::FindAllPrimeNumbers()
 	}
 
 	m_endPosPrime--;
-}
-
-
-void FFT::SetAverageErrorValues()
-{
-	for (int k = 0; k < m_N; k++)
-	{
-		m_erFreqRe += std::abs(m_fValIn[k].real() - m_fValOut[k].real());
-		m_erFreqIm += std::abs(m_fValIn[k].imag() - m_fValOut[k].imag());
-
-		m_erTimeRe += std::abs(m_tValIn[k].real() - m_tValOut[k].real());
-		m_erTimeIm += std::abs(m_tValIn[k].imag() - m_tValOut[k].imag());
-	}
-
-	m_erFreqRe = m_erFreqRe / static_cast<double>(m_N);
-	m_erFreqIm = m_erFreqIm / static_cast<double>(m_N);
-	
-	m_erTimeRe = m_erTimeRe / static_cast<double>(m_N);
-	m_erTimeIm = m_erTimeIm / static_cast<double>(m_N);
-
 }
 
 c_double FFT::GetComplexExp(double N, double k, double n, double sign)
@@ -139,43 +117,6 @@ void FFT::MakeFFTOfVector(c_double* outputVector, int sizeVector)
 			outputVector[k] = m_interVect[k];
 }
 
-void FFT::MakeInverseFFTOfVector(c_double* resultVector, int sizeVector)
-{
-	bool isInterVect = false; // for write result in m_fValOut or m_iterVect
-
-	if (m_primeNumbers[0] == 0)
-	{
-		ChangeFFTVector(resultVector, m_interVect, m_N, m_N, 1);
-		isInterVect = !isInterVect;
-		return;
-	}
-
-	int curSizeOutVect = 1; // current size of a out vector
-
-	for (int i = 0; i < (m_endPosPrime + 1); i++)
-	{
-		curSizeOutVect = curSizeOutVect * m_primeNumbers[m_endPosPrime - i];
-
-		if (isInterVect)
-			ChangeFFTVector(m_interVect, resultVector,
-				m_primeNumbers[m_endPosPrime - i], curSizeOutVect, 1);
-		else
-			ChangeFFTVector(resultVector, m_interVect,
-				m_primeNumbers[m_endPosPrime - i], curSizeOutVect, 1);
-
-		isInterVect = !isInterVect;
-	}
-
-	double double_m_N = static_cast<double>(m_N);
-
-	if (isInterVect)
-		for (int k = 0; k < m_N; k++)
-			resultVector[k] = m_interVect[k] / double_m_N;
-	else
-		for (int k = 0; k < m_N; k++)
-			resultVector[k] = resultVector[k] / double_m_N;
-}
-
 void FFT::ChangeFFTVector(c_double* inputVector, c_double* resultVector, int currentPrime, int sizeOfOutVectors, int sign)
 {
 	c_double** expArray = new c_double * [sizeOfOutVectors] {};
@@ -225,87 +166,52 @@ FFT::FFT(int sizeOFInputVectors)
 {
 	SetN(sizeOFInputVectors);
 	AllocateMemory();
-	FindAllPrimeNumbers();
 }
 
-FFT::FFT(const c_vector vectorValueOfTimeFunc, const c_vector vectorValueOfFrequencyfunc)
+FFT::FFT(const c_vector vectorValueOfTimeFunc)
 {
 	SetN(vectorValueOfTimeFunc.size());
 	AllocateMemory();
-	FillTheInputVectors(vectorValueOfTimeFunc, vectorValueOfFrequencyfunc);
-	FindAllPrimeNumbers();
-
-	MakePermutationForFFT(m_tValIn, m_fValOut, m_N);
-	MakePermutationForFFT(m_fValIn, m_tValOut, m_N);
-
-	MakeFFTOfVector(m_fValOut, m_N);
-	MakeInverseFFTOfVector(m_tValOut, m_N);
-
-	SetAverageErrorValues();
+	FillTheInputVectors(vectorValueOfTimeFunc);
+	
+	MakeForwardFFT();
 }
 
-FFT::FFT(const c_double* vectorValueOfTimeFunc, const c_double* vectorValueOfFrequencyfunc, int sizeOfData)
+FFT::FFT(const c_double* vectorValueOfTimeFunc, int sizeOfData)
 {
 	SetN(sizeOfData);
 	AllocateMemory();
-	FillTheInputVectors(vectorValueOfTimeFunc, vectorValueOfFrequencyfunc);
-	FindAllPrimeNumbers();
+	FillTheInputVectors(vectorValueOfTimeFunc);
 
-	MakePermutationForFFT(m_tValIn, m_fValOut, m_N);
-	MakePermutationForFFT(m_fValIn, m_tValOut, m_N);
-
-	MakeFFTOfVector(m_fValOut, m_N);
-	MakeInverseFFTOfVector(m_tValOut, m_N);
-
-	SetAverageErrorValues();
+	MakeForwardFFT();
 }
 
 void FFT::PrintAllData()
 {
 	std::cout << "========================FFT data========================\n";
 
-	std::cout << "timeInReal\t\ttimeInImag\t\ttimeOutReal\t\ttimeOutImag\n";
+	std::cout << "time Input Real\t\ttime Input Imag\n";
 	for (int k = 0; k < m_N; k++)
 	{
-		std::cout << m_tValIn[k].real() << "\t\t" << m_tValIn[k].imag() << "\t\t" << m_tValOut[k].real() << "\t\t" << m_tValOut[k].imag() << "\n";
+		std::cout << m_tValIn[k].real() << "\t\t" << m_tValIn[k].imag() << "\n";
 	}
 
-	std::cout << "freqInReal\t\tfreqInImag\t\tfreqOutReal\t\tfreqOutImag\n";
+	std::cout << "frequency Output Real\t\tfrequency Output Imag\n";
 	for (int k = 0; k < m_N; k++)
 	{
-		std::cout << m_fValIn[k].real() << "\t\t" << m_fValIn[k].imag() << "\t\t" << m_fValOut[k].real() << "\t\t" << m_fValOut[k].imag() << "\n";
+		std::cout << m_fValOut[k].real() << "\t\t" << m_fValOut[k].imag() << "\n";
 	}
 	std::cout << "========================FFT data========================\n";
 
-
-	std::cout << "========================FFT value eror========================\n";
-	
-	std::cout << "The Average Eror of forward FFT for Real frequency components: " << m_erFreqRe << "\n";
-	std::cout << "The Average Eror of forward FFT for Imag frequency components: " << m_erFreqIm << "\n";
-
-	std::cout << "The Average Eror of inverse FFT for Real time components: " << m_erTimeRe << "\n";
-	std::cout << "The Average Eror of inverse FFT for Imag time components: " << m_erTimeIm << "\n";
-
-	std::cout << "========================FFT value eror========================\n";
 }
 
 void FFT::MakeForwardFFT()
 {
+	FindAllPrimeNumbers();
+
 	MakePermutationForFFT(m_tValIn, m_fValOut, m_N);
 
 	MakeFFTOfVector(m_fValOut, m_N);
-}
-
-void FFT::MakeInverseFFT()
-{
-	MakePermutationForFFT(m_fValIn, m_tValOut, m_N);
-
-	MakeInverseFFTOfVector(m_tValOut, m_N);
-}
-
-c_double* FFT::GetResultOutputTimeData()
-{
-	return m_tValOut;
 }
 
 c_double* FFT::GetResultOutputFrequencyData()
@@ -318,28 +224,10 @@ int FFT::GetSizeOfData()
 	return m_N;
 }
 
-double FFT::GetAverageFrequencyEror(bool isRealEror)
-{
-	if (isRealEror)
-		return m_erFreqRe;
-	else
-		return m_erFreqIm;
-}
-
-double FFT::GetAverageTimeEror(bool isRealEror)
-{
-	if (isRealEror)
-		return m_erTimeRe;
-	else
-		return m_erTimeIm;
-}
-
 FFT::~FFT()
 {
 	delete[] m_tValIn;
-	delete[] m_fValIn;
 
-	delete[] m_tValOut;
 	delete[] m_fValOut;
 
 	delete[] m_interVect;

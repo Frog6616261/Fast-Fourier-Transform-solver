@@ -16,23 +16,19 @@ class FFT
 public:
 
 	FFT(int sizeOFInputVectors);
-	FFT(const c_vector vectorValueOfTimeFunc, const c_vector vectorValueOfFrequencyfunc);
-	FFT(const c_double* vectorValueOfTimeFunc, const c_double* vectorValueOfFrequencyfunc, int sizeOfData);
+	FFT(const c_vector vectorValueOfTimeFunc);
+	FFT(const c_double* vectorValueOfTimeFunc, int sizeOfData);
 
 	void PrintAllData();
 
 	template<typename array>
-	void FillTheInputVectors(array vectorValueOfTimeFunc, array vectorValueOfFrequencyfunc);
+	void FillTheInputVectors(array vectorValueOfTimeFunc);
 	void MakeForwardFFT();
-	void MakeInverseFFT();
-	void SetAverageErrorValues();
 
 
-	c_double* GetResultOutputTimeData();
 	c_double* GetResultOutputFrequencyData();
 	int GetSizeOfData();
-	double GetAverageFrequencyEror(bool isRealEror);
-	double GetAverageTimeEror(bool isRealEror);
+
 
 	~FFT(); // delete m_tValIn, m_fValIn, m_tValOut, m_fValOut, m_primeNumbers
 
@@ -42,22 +38,12 @@ private:
 	int m_N; //a number of all values of time function
 
 	c_double* m_tValIn; //time value input
-	c_double* m_fValIn; // frequency value input
-
-	c_double* m_tValOut; //time value output
 	c_double* m_fValOut; //frequency value output
 
 	c_double* m_interVect; // intermediate vector for intermediate solve
 
 	int* m_primeNumbers; // the vector of prime nimbers of number N
 	int m_endPosPrime = 0; // end position of exsisting prime number in prime numbers array
-
-	//the average error between the input and output variables
-	double m_erFreqRe = 0;
-	double m_erFreqIm = 0;
-
-	double m_erTimeRe = 0;
-	double m_erTimeIm = 0;
 
 
 	void SetN(int countOfValues);
@@ -73,8 +59,6 @@ private:
 
 	void MakeFFTOfVector(c_double* resultVector, int sizeVector); // Fast Fourier Transform for permutation vector
 
-	void MakeInverseFFTOfVector(c_double* resultVector, int sizeVector); // inverse Fast Fourier Transform for permutation vector
-
 	void ChangeFFTVector(c_double* inputVector, c_double* resultVector,
 		int currentPrime, int sizeOfOutVectors, int sign); //multiplication input vector and array of exp for a current prime number 
 
@@ -84,11 +68,10 @@ private:
 };
 
 template<typename array>
-inline void FFT::FillTheInputVectors(array vectorValueOfTimeFunc, array vectorValueOfFrequencyfunc)
+inline void FFT::FillTheInputVectors(array vectorValueOfTimeFunc)
 {
 	for (int number = 0; number < m_N; number++)
 	{
-		m_fValIn[number] = vectorValueOfFrequencyfunc[number];
 		m_tValIn[number] = vectorValueOfTimeFunc[number];
 	}
 }
