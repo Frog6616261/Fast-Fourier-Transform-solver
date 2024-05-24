@@ -30,6 +30,12 @@
     <ClCompile Include="GraphPloter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IFFT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ErorCalculator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FFT.h">
@@ -42,6 +48,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GraphPloter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IFFT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ErorCalculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
