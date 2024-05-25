@@ -1,6 +1,8 @@
 #include <iostream>
 #include "FFT.h"
 #include "IFFT.h"
+#include "DFT.h"
+#include "IDFT.h"
 #include "FileReader.h"
 #include "FileParser.h"
 #include "ErorCalculator.h"
@@ -11,7 +13,7 @@
 //#define PRINT_FILE_PARSER_DATA 
 //#define PRINT_FILE_READER_DATA
 //#define READ_FILE
-#define PRINT_FFT_DATA
+//#define PRINT_FFT_DATA
 
 
 void SetFileNamePath(std::string& line, std::string readersFileName);
@@ -54,8 +56,16 @@ int main(int argc, char* argv[])
 
 #ifndef READ_FILE
     Randomizer Rand;
+    IDFT D;
 
-    c_vector frequencyIn = { 1, 2, 3, 4 };
+    c_vector fIn = { 1, 2, 3, 4 ,5 ,6 ,7 ,8 ,9};
+    c_vector tOut;
+    tOut.resize(9, 0);
+    D.SetArrayOfIDFT(tOut, fIn);
+
+    for (int i = 0; i < 9; i++)
+        std::cout << tOut[i].real() << "\t" << tOut[i].imag() << "\n";
+
     //frequencyIn.resize(100);
 
     //Rand.SetRandomComplexNumbers(frequencyIn, 50);
@@ -63,7 +73,7 @@ int main(int argc, char* argv[])
 #endif // !READ_FILE
 
 
- FFT Solver{frequencyIn};
+ 
  
 
 
