@@ -27,6 +27,7 @@ public:
 
 
 	c_double* GetResultOutputTimeData();
+	c_double* GetInputFrequencyData();
 	int GetSizeOfData();
 
 

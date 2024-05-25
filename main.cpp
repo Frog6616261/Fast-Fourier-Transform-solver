@@ -56,19 +56,33 @@ int main(int argc, char* argv[])
 
 #ifndef READ_FILE
     Randomizer Rand;
-    IDFT D;
+    DFT D;
 
-    c_vector fIn = { 1, 2, 3, 4 ,5 ,6 ,7 ,8 ,9};
-    c_vector tOut;
-    tOut.resize(9, 0);
-    D.SetArrayOfIDFT(tOut, fIn);
+    int n = 128;
 
-    for (int i = 0; i < 9; i++)
-        std::cout << tOut[i].real() << "\t" << tOut[i].imag() << "\n";
+    c_vector tIn;
+    c_vector fIn;
 
-    //frequencyIn.resize(100);
+    tIn.resize(n, 0);
+    fIn.resize(n, 0);
 
-    //Rand.SetRandomComplexNumbers(frequencyIn, 50);
+    Rand.SetRandomComplexNumbers(tIn, 20, true);
+    D.SetArrayOfDFT(fIn, tIn);
+
+    FFT F(tIn);
+    IFFT IF(fIn);
+
+    F.PrintAllData();
+    IF.PrintTimeDataResult();
+
+    ErrorCalculator timeError(F.GetInputTimeData(),  IF.GetResultOutputTimeData(), F.GetSizeOfData());
+    ErrorCalculator freqError(IF.GetInputFrequencyData(), F.GetResultOutputFrequencyData(), IF.GetSizeOfData());
+
+    std::cout << "time erro\n";
+    timeError.PrintError();
+    std::cout << "frequncy erro\n";
+    freqError.PrintError();
+
 
 #endif // !READ_FILE
 

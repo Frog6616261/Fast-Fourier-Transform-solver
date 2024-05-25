@@ -1,6 +1,7 @@
 #pragma once
 
 #include <complex>
+#include <iostream>
 
 #define c_double std::complex<double>
 
@@ -8,6 +9,7 @@ class ErrorCalculator
 {
 public:
 
+	ErrorCalculator();
 	ErrorCalculator(const c_double* firstVector, const c_double* secondVector, int sizeOfVectors);
 
 	void CalculateAverageError(const c_double* firstVector, const c_double* secondVector, int sizeOfVectors);
@@ -17,6 +19,8 @@ public:
 
 	double GetRealError();
 	double GetImagError();
+
+	void PrintError();
 
 
 private:

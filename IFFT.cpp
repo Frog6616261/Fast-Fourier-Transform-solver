@@ -196,16 +196,27 @@ void IFFT::PrintTimeDataResult()
 {
 	std::cout << "========================IFFT data========================\n";
 
-	std::cout << "time Output Real\t\ttime Output Imag\n";
+	std::cout << "time Output Real\n";
 	for (int k = 0; k < m_N; k++)
 	{
-		std::cout << m_tValOut[k].real() << "\t\t" << m_tValOut[k].imag() << "\n";
+		std::cout << m_tValOut[k].real()  << "\n";
+	}
+	std::cout << "time Output Imag\n";
+	for (int k = 0; k < m_N; k++)
+	{
+		std::cout << m_tValOut[k].imag() << "\n";
 	}
 
-	std::cout << "frequency Input Real\t\tfrequency Input Imag\n";
+
+	std::cout << "frequency Input Real\n";
 	for (int k = 0; k < m_N; k++)
 	{
-		std::cout << m_fValIn[k].real() << "\t\t" << m_fValIn[k].imag() << "\n";
+		std::cout << m_fValIn[k].real() << "\n";
+	}
+	std::cout << "frequency Input Imag\n";
+	for (int k = 0; k < m_N; k++)
+	{
+		std::cout  << m_fValIn[k].imag() << "\n";
 	}
 
 	std::cout << "========================IFFT data========================\n";
@@ -223,6 +234,11 @@ void IFFT::MakeInverseFFT()
 c_double* IFFT::GetResultOutputTimeData()
 {
 	return m_tValOut;
+}
+
+c_double* IFFT::GetInputFrequencyData()
+{
+	return m_fValIn;
 }
 
 int IFFT::GetSizeOfData()
