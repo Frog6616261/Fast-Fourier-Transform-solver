@@ -11,8 +11,8 @@ class Randomizer
 {
 public:
 
-	void SetRandomComplexNumbers(c_vector& fillingArray, int seed);
-	void SetRandomComplexNumbers(c_double* fillingArray, int arraySize, int seed);
+	void SetRandomComplexNumbers(c_vector& fillingArray, int seed, bool isOnlyReal);
+	void SetRandomComplexNumbers(c_double* fillingArray, int arraySize, int seed, bool isOnlyReal);
 
 private:
 
