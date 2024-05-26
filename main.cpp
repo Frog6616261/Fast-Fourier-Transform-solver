@@ -7,13 +7,14 @@
 #include "FileParser.h"
 #include "ErorCalculator.h"
 #include "Randomizer.h"
+#include <iomanip>
 
 
 
 //#define PRINT_FILE_PARSER_DATA 
 //#define PRINT_FILE_READER_DATA
 //#define READ_FILE
-//#define PRINT_FFT_DATA
+
 
 
 void SetFileNamePath(std::string& line, std::string readersFileName);
@@ -23,6 +24,7 @@ int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "ru");
     setlocale(LC_NUMERIC, "eng");
+    std::cout << std::fixed << std::setprecision(15);
 
 
 #ifdef READ_FILE
@@ -58,7 +60,7 @@ int main(int argc, char* argv[])
     Randomizer Rand;
     DFT D;
 
-    int n = 128;
+    int n = 10;
 
     c_vector tIn;
     c_vector fIn;
@@ -66,7 +68,7 @@ int main(int argc, char* argv[])
     tIn.resize(n, 0);
     fIn.resize(n, 0);
 
-    Rand.SetRandomComplexNumbers(tIn, 20, true);
+    Rand.SetRandomComplexNumbers(tIn, 1, true);
     D.SetArrayOfDFT(fIn, tIn);
 
     FFT F(tIn);
@@ -86,16 +88,6 @@ int main(int argc, char* argv[])
 
 #endif // !READ_FILE
 
-
- 
- 
-
-
-
-
-#ifdef PRINT_FFT_DATA
-    Solver.PrintAllData();
-#endif 
 
     return 0;
 }
